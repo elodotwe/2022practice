@@ -40,10 +40,10 @@ public class Drivetrain extends SubsystemBase {
     rightMotor.setInverted(true);
 
     // 360 pulses per revolution on the encoders we have installed on the practice bot
-    // 8.25" diameter wheel, directly driven on the same shaft as the encoder
+    // 8.25" diameter wheel (0.20955 meters), directly driven on the same shaft as the encoder
     // Distance per pulse = distance covered per revolution / pulses per revolution
     // Distance covered per revolution = wheel circumference = diameter * PI
-    double distancePerPulse = 8.25 * Math.PI / 360;
+    double distancePerPulse = 0.20955 * Math.PI / 360;
     leftEncoder.setDistancePerPulse(distancePerPulse);
     rightEncoder.setDistancePerPulse(distancePerPulse);
 
