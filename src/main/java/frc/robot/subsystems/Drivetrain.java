@@ -1,15 +1,21 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.ChannelMap;
 
 public class Drivetrain extends SubsystemBase {
-  private Spark leftMotor = new Spark(ChannelMap.leftMotorPWMChannel);
-  private Spark rightMotor = new Spark(ChannelMap.rightMotorPWMChannel);
+  public final MotorController leftMotor = new Spark(ChannelMap.leftMotorPWMChannel);
+  public final MotorController rightMotor = new Spark(ChannelMap.rightMotorPWMChannel);
 
   public final DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
 
@@ -20,6 +26,11 @@ public class Drivetrain extends SubsystemBase {
   public final Encoder rightEncoder = new Encoder(
       new DigitalInput(ChannelMap.rightEncoderA),
       new DigitalInput(ChannelMap.rightEncoderB));
+
+  public final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+
+  public final Field2d field2d = new Field2d();
+  public final DifferentialDriveOdometry odometry;
 
   public Drivetrain() {
     super();
@@ -35,5 +46,18 @@ public class Drivetrain extends SubsystemBase {
     double distancePerPulse = 8.25 * Math.PI / 360;
     leftEncoder.setDistancePerPulse(distancePerPulse);
     rightEncoder.setDistancePerPulse(distancePerPulse);
+
+    leftEncoder.reset();
+    rightEncoder.reset();
+
+    odometry = new DifferentialDriveOdometry(new Rotation2d());
+
+    SmartDashboard.putData("Field", field2d);
+  }
+
+  public void periodic() {
+    var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
+    var pose = odometry.update(gyroAngle, leftEncoder.getDistance(), rightEncoder.getDistance());
+    field2d.setRobotPose(pose);
   }
 }
