@@ -6,8 +6,8 @@ public class ChannelMap {
     public static final int rightMotorPWMChannel = 1;
 
     // Digital I/O
-    public static final int leftMotorEncoderChannelA = 0;
-    public static final int leftMotorEncoderChannelB = 1;
-    public static final int rightMotorEncoderChannelA = 2;
-    public static final int rightMotorEncoderChannelB = 3;
+    public static final int leftEncoderA = 0;
+    public static final int leftEncoderB = 1;
+    public static final int rightEncoderA = 2;
+    public static final int rightEncoderB = 3;
 }

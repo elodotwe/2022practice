@@ -3,14 +3,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.Teleop;
-import frc.robot.subsystems.SubsystemManager;
+import frc.robot.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
   private Joysticks joysticks = new Joysticks();
-  private SubsystemManager subsystemManager = new SubsystemManager();
-  private Sensors sensors = new Sensors();
+  private Drivetrain drivetrain = new Drivetrain();
 
-  private Teleop teleop = new Teleop(subsystemManager.drivetrain, joysticks);
+  private Teleop teleop = new Teleop(drivetrain, joysticks);
 
   @Override
   public void teleopInit() {
