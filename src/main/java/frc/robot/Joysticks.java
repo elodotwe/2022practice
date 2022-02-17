@@ -1,17 +1,19 @@
 package frc.robot;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Joysticks {
     private Joystick chassisJoystick = new Joystick(0);
 
-    public double getDriveForewardPower() {
+    public Supplier<Double> getDriveForewardPower() {
         // Left stick Y on logitech joypad, inverted because we want 1.0 to be forward
-        return -chassisJoystick.getRawAxis(1);
+        return () -> -chassisJoystick.getRawAxis(1);
     }
 
-    public double getDriveRotationPower() {
+    public Supplier<Double> getDriveRotationPower() {
         // Right stick X on logitech joypad
-        return chassisJoystick.getRawAxis(4);
+        return () -> chassisJoystick.getRawAxis(4);
     }
 }

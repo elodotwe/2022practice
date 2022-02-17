@@ -9,7 +9,7 @@ public class Robot extends TimedRobot {
   private Joysticks joysticks = new Joysticks();
   private Drivetrain drivetrain = new Drivetrain();
 
-  private Teleop teleop = new Teleop(drivetrain, joysticks);
+  private Teleop teleop = new Teleop(drivetrain, joysticks.getDriveForewardPower(), joysticks.getDriveRotationPower());
 
   @Override
   public void teleopInit() {
