@@ -6,10 +6,12 @@ public class Joysticks {
     private Joystick chassisJoystick = new Joystick(0);
 
     public double getDriveForewardPower() {
-        return chassisJoystick.getY();
+        // Left stick Y on logitech joypad, inverted because we want 1.0 to be forward
+        return -chassisJoystick.getRawAxis(1);
     }
 
     public double getDriveRotationPower() {
-        return chassisJoystick.getX();
+        // Right stick X on logitech joypad
+        return chassisJoystick.getRawAxis(4);
     }
 }

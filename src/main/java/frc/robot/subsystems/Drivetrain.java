@@ -10,4 +10,9 @@ public class Drivetrain extends SubsystemBase {
   private Spark rightMotor = new Spark(ChannelMap.rightMotorPWMChannel);
 
   public DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
+
+  public Drivetrain() {
+    super();
+    rightMotor.setInverted(true);
+  }
 }

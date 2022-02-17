@@ -8,17 +8,26 @@ import frc.robot.subsystems.SubsystemManager;
 public class Robot extends TimedRobot {
   private Joysticks joysticks = new Joysticks();
   private SubsystemManager subsystemManager = new SubsystemManager();
+  private Sensors sensors = new Sensors();
 
   private Teleop teleop = new Teleop(subsystemManager.drivetrain, joysticks);
 
   @Override
   public void teleopInit() {
-      teleop.schedule();
+    teleop.schedule();
   }
 
   @Override
   public void teleopExit() {
-      teleop.cancel();
+    teleop.cancel();
+  }
+
+  @Override
+  public void autonomousInit() {
+  }
+
+  @Override
+  public void autonomousExit() {
   }
 
   @Override
