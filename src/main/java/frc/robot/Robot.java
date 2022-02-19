@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.DrivePath;
 import frc.robot.commands.Teleop;
 import frc.robot.simulation.Simulation;
 import frc.robot.subsystems.Drivetrain;
@@ -11,6 +12,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain = new Drivetrain();
 
   private Teleop teleop = new Teleop(drivetrain, joysticks.getDriveForewardPower(), joysticks.getDriveRotationPower());
+  private DrivePath drivePath = new DrivePath(drivetrain);
 
   private Simulation simulation;
 
@@ -26,10 +28,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    drivePath.schedule();
   }
 
   @Override
   public void autonomousExit() {
+    drivePath.cancel();
   }
 
   @Override

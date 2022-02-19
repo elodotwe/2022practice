@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
@@ -31,6 +35,14 @@ public class Drivetrain extends SubsystemBase {
 
   public final Field2d field2d = new Field2d();
   public final DifferentialDriveOdometry odometry;
+  public final DifferentialDriveKinematics kinematics;
+  public final SimpleMotorFeedforward motorFeedforward;
+
+  public final double trackWidthMeters = 0.69;
+  public final double ksVolts = 0.22;
+  public final double kvVoltSecondsPerMeter = 1.98;
+  public final double kaVoltSecondsSquaredPerMeter = 0.2;
+  public final double kPDriveVel = 8.5;
 
   public Drivetrain() {
     super();
@@ -53,11 +65,30 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(new Rotation2d());
 
     SmartDashboard.putData("Field", field2d);
+
+    kinematics = new DifferentialDriveKinematics(trackWidthMeters);
+    motorFeedforward = new SimpleMotorFeedforward(ksVolts, kvVoltSecondsPerMeter, kaVoltSecondsSquaredPerMeter);
   }
 
   public void periodic() {
     var gyroAngle = Rotation2d.fromDegrees(-gyro.getAngle());
     var pose = odometry.update(gyroAngle, leftEncoder.getDistance(), rightEncoder.getDistance());
     field2d.setRobotPose(pose);
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts) {
+    leftMotor.setVoltage(leftVolts);
+    rightMotor.setVoltage(rightVolts);
+    drive.feed();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(leftEncoder.getRate(), rightEncoder.getRate());
+  }
+
+  public void resetOdometry(Pose2d pose) {
+    leftEncoder.reset();
+    rightEncoder.reset();
+    odometry.resetPosition(pose, gyro.getRotation2d());
   }
 }
