@@ -1,20 +1,31 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DrivePath;
+import frc.AutonChooser;
 import frc.robot.commands.Teleop;
 import frc.robot.simulation.Simulation;
 import frc.robot.subsystems.Drivetrain;
 
 public class Robot extends TimedRobot {
-  private Joysticks joysticks = new Joysticks();
-  private Drivetrain drivetrain = new Drivetrain();
+  private Joysticks joysticks;
+  private Drivetrain drivetrain;
 
-  private Teleop teleop = new Teleop(drivetrain, joysticks.getDriveForewardPower(), joysticks.getDriveRotationPower());
-  private DrivePath drivePath = new DrivePath(drivetrain, "paths/Unnamed.wpilib.json");
+  private Teleop teleop;
 
   private Simulation simulation;
+
+  private AutonChooser autonChooser;
+  private Command autonCommand = null;
+
+  @Override
+  public void robotInit() {
+    joysticks = new Joysticks();
+    drivetrain = new Drivetrain();
+    teleop = new Teleop(drivetrain, joysticks.getDriveForewardPower(), joysticks.getDriveRotationPower());
+    autonChooser = new AutonChooser(drivetrain);
+  }
 
   @Override
   public void teleopInit() {
@@ -28,12 +39,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    drivePath.schedule();
+    autonCommand = autonChooser.getAutonCommand();
+    if (autonCommand != null) {
+      autonCommand.schedule();
+    } else {
+      System.out.println("WARNING: no autonomous because AutonChooser returned null");
+    }
   }
 
   @Override
   public void autonomousExit() {
-    drivePath.cancel();
+    if (autonCommand != null) {
+      autonCommand.cancel();
+    }
   }
 
   @Override
