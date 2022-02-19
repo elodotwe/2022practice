@@ -12,7 +12,7 @@ public class Robot extends TimedRobot {
   private Drivetrain drivetrain = new Drivetrain();
 
   private Teleop teleop = new Teleop(drivetrain, joysticks.getDriveForewardPower(), joysticks.getDriveRotationPower());
-  private DrivePath drivePath = new DrivePath(drivetrain);
+  private DrivePath drivePath = new DrivePath(drivetrain, "paths/Unnamed.wpilib.json");
 
   private Simulation simulation;
 
