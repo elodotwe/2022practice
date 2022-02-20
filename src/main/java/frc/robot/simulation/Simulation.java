@@ -19,6 +19,7 @@ public class Simulation {
     private EncoderSim rightEncoderSim;
     private ADXRS450_GyroSim gyroSim;
 
+    // Do not remove this variable. We need to retain the return value from `registerResetCallback()`, otherwise the callbacks don't happen.
     private CallbackStore callbackStore;
 
     private void initializeDrivetrainSim() {
@@ -35,7 +36,11 @@ public class Simulation {
         callbackStore = leftEncoderSim.registerResetCallback(new NotifyCallback() {
             @Override
             public void callback(String name, HALValue value) {
+                // We reset the encoders only at the beginning of an autonomous routine-- when we know what our starting position should be.
+                // Toss out all knowledge of our simulated physics; if we're resetting the encoder we want to reset our physics too.
                 initializeDrivetrainSim();
+                // Calling simulationPeriodic manually means the simulated encoders and gyro all get updated immediately-- so odometry doesn't
+                // get a chance to pick up any leftover crap from prior sessions.
                 simulationPeriodic();
             }
         }, false);

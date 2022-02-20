@@ -22,7 +22,7 @@ public class AutonChooser {
     public AutonChooser(Drivetrain drivetrain) {
         AutonChoice[] choices = {
             new AutonChoice("unnamed path", new DrivePath(drivetrain, "paths/Unnamed.wpilib.json")),
-            new AutonChoice("path2", new DrivePath(drivetrain, "paths/path2.wpilib.json"))
+            new AutonChoice("long shot", new DrivePath(drivetrain, "paths/collect_near.wpilib.json").andThen(new DrivePath(drivetrain, "paths/reverse_to_long_shot.wpilib.json", false), new DrivePath(drivetrain, "paths/long_shot.wpilib.json", false)))
         };
 
         boolean first = true;

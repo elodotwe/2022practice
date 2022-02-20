@@ -14,8 +14,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Drivetrain;
 
 public class DrivePath extends SequentialCommandGroup {
-    public final double kMaxSpeedMetersPerSecond = 3;
-    public final double kMaxAccelerationMetersPerSecondSquared = 3;
     public final double kRamseteB = 2;
     public final double kRamseteZeta = 0.7;
 
